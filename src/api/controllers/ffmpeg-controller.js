@@ -22,9 +22,13 @@ import { uploadToSupabase, downloadFile } from '../../services/storage-service.j
 import { promises as fsPromises } from 'fs';
 
 export const healthCheck = async (req, res) => {
-  const isHealthy = await checkHealth();
-  if (isHealthy) res.send('OK');
-  else res.status(500).send('FFmpeg not ready');
+  // Quick health check - just confirm server is running
+  // FFmpeg availability checked separately via /api/ffmpeg-info
+  try {
+    res.send('OK');
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
 };
 
 export const getInfo = async (req, res) => {
